@@ -74,13 +74,12 @@ int main()
   ==========================================================*/
   color = CYAN;
   while(1){
-    //printf("what's your name? ");
-	prints("blah");
+    printf("what's your name? ");
     gets(ans);
     if (strcmp(ans, "quit")==0){
-      //printf("\nexit main()\n");
+      printf("\nexit main()\n");
       break;
     }
-    //printf("\nWelcome %s!\n", ans);
+    printf("\nWelcome %s!\n", ans);
   }
 }
