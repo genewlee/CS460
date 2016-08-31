@@ -1,7 +1,7 @@
 #define MAXLEN 128
 
 char *ctable = "0123456789ABCDEF";
-u16 BASE = 10;
+u16 BASE;
 
 void prints(u8 *s)
 {
@@ -34,7 +34,7 @@ void gets(char s[])
 //}
 
 // From KCW
-int rpu (u16 x)
+void rpu (u16 x)
 {
     char c;
     if (x)
@@ -46,10 +46,53 @@ int rpu (u16 x)
 }
 
 // From KCW
-int printu(u16 x)
+//void printu(u16 x)
+//{
+//    //(x==0) ? putc('0') : rpu(x);
+//    putc(' ');
+//}
+
+void printu(u32 x)
 {
-    (x==0) ? putc('0') : rpu(x);
-    putc(' ');
+  if (x == 0)
+    putc('0');
+  else
+  {
+    BASE = 10;
+    rpu(x);
+  }
+  putc(' ');
+}
+
+void printd(int x)
+{
+  if (x == 0)
+    putc('0');
+  else
+  {
+    BASE = 10;
+    if (x < 0)
+    {
+      x *= -1;
+      putc('-');
+    }
+    rpu(x);
+  }
+  putc(' ');
+}
+
+void printx(u32 x)
+{
+  if (x == 0)
+    putc('0');
+  else
+  {
+    BASE = 16;
+    putc('0');
+    putc('x');
+    rpu(x);
+  }
+  putc(' ');
 }
 
 // From KCW
@@ -75,8 +118,8 @@ void printf(char *fmt, ...)
             case 'c': putc(*ip); break;
             case 's': prints(*ip); break;
             case 'u': printu(*ip); break;
-            //case 'd': printd(*ip); break;
-            //case 'x': printx(*ip); break;
+            case 'd': printd(*ip); break;
+            case 'x': printx(*ip); break;
             //case 'l': printl(*(u32 *)ip++); break;
             //case 'X': printX(*(u32 *)ip++); break;
         }

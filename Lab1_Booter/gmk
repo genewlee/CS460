@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # remove old files
-rm bs.o bc.o gbooter gdisk
+rm bs.o bc.o gbooter
 
 # link bs.o and bc.o into a binary executable without header
 echo Compiling assembly...
