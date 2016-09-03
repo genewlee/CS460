@@ -1,11 +1,11 @@
 /******************************************************
 *           Image file booter's bc.c code             *
 *******************************************************/
-#include "ext2.h"
 #define BLK 1024
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned long u32;
+#include "ext2.h"
 typedef struct ext2_group_desc  GD;
 typedef struct ext2_inode        INODE;
 typedef struct ext2_dir_entry_2 DIR;
@@ -65,7 +65,9 @@ main() // booter's main function, called from assembly code
     name[0] = "boot"; name[1] = filename;
     prints("bootname: ");
     gets(filename);
+    prints("foo");
     if (filename[0]==0) name[1] = "mtx";
+    prints(name[1]);
     getblk(2, buf1); // read blk#2 to get group descriptor 0
     gp = (GD *)buf1;
     iblk = (u16)gp->bg_inode_table; // inodes begin block
