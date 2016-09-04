@@ -65,7 +65,6 @@ main() // booter's main function, called from assembly code
     name[0] = "boot"; name[1] = filename;
     prints("bootname: ");
     gets(filename);
-    prints("foo");
     if (filename[0]==0) name[1] = "mtx";
     prints(name[1]);
     getblk(2, buf1); // read blk#2 to get group descriptor 0

@@ -18,9 +18,9 @@ echo Done
 
 # dump booter to sector 0 of a FD
 
-dd if=gbooter of=FDimage bs=512 count=1 conv=notrunc
+dd if=gbooter of=mtximage bs=1024 count=1 conv=notrunc
 
 # run the VM
 #qemu -hda vdisk -smp 8 -m 512M -serial mon:stdio 
-#qemu -fda FDimage -no-fd-bootchk --verbose
-qemu -drive format=raw,if=floppy,file=FDimage
+qemu -fda mtximage -no-fd-bootchk format=raw 
+#qemu -drive file=FDimage,format=raw,media=disk,index=0
