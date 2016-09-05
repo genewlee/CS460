@@ -21,6 +21,6 @@ echo Done
 dd if=gbooter of=mtximage bs=1024 count=1 conv=notrunc
 
 # run the VM
-#qemu -hda vdisk -smp 8 -m 512M -serial mon:stdio 
-qemu -fda mtximage -no-fd-bootchk format=raw 
-#qemu -drive file=FDimage,format=raw,media=disk,index=0
+#qemu -hda vdisk -smp 8 -m 512M -serial mon:stdio
+qemu -fda mtximage -no-fd-bootchk
+#qemu -drive file=mtximage,format=raw,if=floppy,index=0 -no-fd-bootchk

@@ -25,7 +25,9 @@ int gets (char *s)
     *s = 0;
 }
 int getblk(u16 blk, char *buf)
-{   readfd(blk/18, ((2*blk)%36)/18, ((2*blk)%36)%18, buf); }
+{
+    readfd(blk/18, ((2*blk)%36)/18, ((2*blk)%36)%18, buf);
+}
 
 u16 search(INODE *ip, char *name)
 {
@@ -47,7 +49,7 @@ u16 search(INODE *ip, char *name)
                     return ((u16)dp->inode);
                 }
                 dp->name[dp->name_len] = c;   // restore last byte
-                dp = (char *)dp + dp->rec_len;
+                dp = (DIR *)((char *)dp + dp->rec_len);
             }
         }
     }
@@ -63,15 +65,19 @@ main() // booter's main function, called from assembly code
     INODE *ip;
     DIR *dp;
     name[0] = "boot"; name[1] = filename;
+
     prints("bootname: ");
     gets(filename);
     if (filename[0]==0) name[1] = "mtx";
-    prints(name[1]);
+
+    //filesystem
     getblk(2, buf1); // read blk#2 to get group descriptor 0
     gp = (GD *)buf1;
     iblk = (u16)gp->bg_inode_table; // inodes begin block
+
     getblk(iblk, buf1);             // read first inode block
     ip = (INODE *)buf1 + 1;         // ip->root inode #2
+
     for (i=0; i<2; i++)
     { // search for system root
         ino = search(ip, name[i]) - 1;
@@ -80,16 +86,14 @@ main() // booter's main function, called from assembly code
         ip = (INODE *)buf1 + (ino % 8);
     }
     if ((u16)ip->i_block[12]) // read indirect block into buf2, if any
-        getblk((u16)ip->i_block[12], buf2);
-    setes(0x1000);            // load ES to loading segment
-    for (i=0; i<12; i++)      // load indirect blocks
+        getblk((u16)ip->i_block[12], buf2); // load boot image into buf2
+    setes(0x1000);            // load ES to loading segment 1024k
+
+    for (i=0; i<12; i++)      // load direct blocks
     {
-        up = (u32 *)buf2;
-        while (*up++)
-        {
-            getblk((u16)*up, 0);
-            inces(); putc('*'); // show a * for each direct block loaded
-        }
+        getblk((u16)ip->i_block[i], 0);
+        inces(); putc('*'); // show a * for each direct block loaded
+
     }
     if ((u16)ip->i_block[12])
     { // load indirect blocks
