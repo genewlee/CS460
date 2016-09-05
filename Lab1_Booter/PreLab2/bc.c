@@ -9,6 +9,7 @@ typedef unsigned long  u32;
 #define  RED    12
 #define  MAG    13
 #define  YELLOW 14
+u16 NSEC=2;
 
 struct partition {         // Partition table entry in MBR
        u8  drive;          // 0x80 - active
@@ -72,8 +73,15 @@ int main()
   In the MBR, partition table begins at byte offset 0x1BE
   // DO #1:  WRITE C CODE TO PRINT THE PARTITIONS
   ==========================================================*/
-  printf()
   color = CYAN;
+  printf("p#    type    start_sector    nr_sector\n");
+  printf("---------------------------------------\n");
+  for (i = 0; i < 4; i++)
+  {
+      p = (struct partition *)(dp->addr + (u16)0x1BE + ((u16)(16 * i))); // each entry of ptable defined by a 16-byte partition structure
+      printf("%d    %d         %l         %l\n", i+1, p->type, p->start_sector, p->nr_sectors);
+  }
+  color = GREEN;
   while(1){
     printf("what's your name? ");
     gets(ans);

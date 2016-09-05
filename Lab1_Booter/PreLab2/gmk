@@ -7,9 +7,11 @@ rm bs.o bc.o gbooter
 echo Compiling assembly...
 as86 -o bs.o bs.s	# assemble bs.s into bs.o
 echo Done
+
 echo Compiling c...
 bcc -c -ansi bc.c	# comple bc.c into bc.o
 echo Done
+
 echo linking .o files...
 ld86 -d -o gbooter bs.o bc.o /usr/lib/bcc/libc.a
 echo Done
@@ -18,7 +20,7 @@ echo Done
 
 dd if=gbooter of=vdisk bs=16 count=27 conv=notrunc
 dd if=gbooter of=vdisk bs=512 seek=1  conv=notrunc
-#dd if=gbooter of=mtximage bs=512 count=1 conv=notrunc
+#dd if=gbooter of=mtximage bs=1024 count=1 conv=notrunc
 
 # run the VM
 qemu -hda vdisk -smp 8 -m 512M -serial mon:stdio 

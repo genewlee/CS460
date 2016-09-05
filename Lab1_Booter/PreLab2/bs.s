@@ -87,7 +87,7 @@ _setds:
 
 ! diskr(): read disk sectors specified by _dap in C code
 _diskr:
-         mov dx, #0x0080
+        mov dx, #0x0080
         mov ax, #0x4200
         mov si, #_dap
 

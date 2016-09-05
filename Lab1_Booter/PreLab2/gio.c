@@ -45,6 +45,16 @@ void rpu (u16 x)
     }
 }
 
+int rpul(u32 x)
+{
+    char c;
+    if (x) {
+        c = ctable[(u32)x % BASE];
+        rpu((u32)x / BASE);
+        putc(c);
+    }
+}
+
 // From KCW
 //void printu(u16 x)
 //{
@@ -95,6 +105,16 @@ void printx(u32 x)
   putc(' ');
 }
 
+int printl(u32 x)
+{
+    BASE = 10;
+    if (x==0)
+        putc('0');
+    else
+        rpul((u32)x);
+    putc(' ');
+}
+
 // From KCW
 void printf(char *fmt, ...)
 {
@@ -120,7 +140,7 @@ void printf(char *fmt, ...)
             case 'u': printu(*ip); break;
             case 'd': printd(*ip); break;
             case 'x': printx(*ip); break;
-            //case 'l': printl(*(u32 *)ip++); break;
+            case 'l': printl(*(u32 *)ip++); break;
             //case 'X': printX(*(u32 *)ip++); break;
         }
         cp++; ip++;
