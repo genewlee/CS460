@@ -96,7 +96,7 @@ main() // booter's main function, called from assembly code
 
     }
     if ((u16)ip->i_block[12])
-    { // load indirect blocks
+    { // load indirect blocks, if any
         up = (u32 *)buf2;
         while(*up++)
         {
