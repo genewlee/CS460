@@ -55,6 +55,7 @@ int getSector(u32 sector, char *addr)
 int main()
 {
   int i;
+  char * type;
   struct partition *p;
   printf("booter start in main()\n");
 
@@ -79,7 +80,11 @@ int main()
   for (i = 0; i < 4; i++)
   {
       p = (struct partition *)(dp->addr + (u16)0x1BE + ((u16)(16 * i))); // each entry of ptable defined by a 16-byte partition structure
-      printf("%d    %d         %l         %l\n", i+1, p->type, p->start_sector, p->nr_sectors);
+      switch(p->type){
+          case 0x90: type = "MTX"; break;
+          case 0x83: type = "Linux"; break;
+      }
+      printf("%d    %s    %l         %l\n", i+1, type, p->start_sector, p->nr_sectors);
   }
   color = GREEN;
   while(1){

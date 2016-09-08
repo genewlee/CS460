@@ -49,8 +49,8 @@ int rpul(u32 x)
 {
     char c;
     if (x) {
-        c = ctable[(u32)x % BASE];
-        rpu((u32)x / BASE);
+        c = ctable[x % BASE];
+        rpul(x / BASE);
         putc(c);
     }
 }
