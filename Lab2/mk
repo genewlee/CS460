@@ -1,0 +1,23 @@
+VFD=mtximage
+
+as86 -o ts.o ts.s
+bcc  -c -ansi t.c
+ld86 -d -o a.out ts.o t.o mtxlib /usr/lib/bcc/libc.a
+
+# running gbooter
+cp /media/gene/XDrive/CS460/Lab1_Booter/PreLab1/gbooter ./
+dd if=gbooter of=$VFD bs=1024 count=1 conv=notrunc
+
+echo mount $VFD on /mnt
+
+mount -o loop $VFD /mnt
+
+rm /mnt/boot/*
+
+cp a.out /mnt/boot/mtx
+umount /mnt
+
+echo ready to go?
+read dummy
+
+qemu -fda $VFD -no-fd-bootchk
