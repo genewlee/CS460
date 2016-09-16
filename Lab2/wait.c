@@ -2,7 +2,7 @@ int ksleep(int event)
 {
     running->event = event;     // record event in PROC.event
     running->status = SLEEP;    // change status to SLEEP
-    enqueue(&sleepList, running);
+    put_proc(&sleepList, running);
     tswitch();                  // give up CPU
 }
 int kwakeup(int event)
@@ -13,6 +13,7 @@ int kwakeup(int event)
         if (p->status == SLEEP && p->event == event){
             p->event = 0;   // cancel PROC’s event
             p->status = READY; // make it ready to run again
+            get_proc(&sleepList);
             enqueue(&readyQueue, p);
         }
     }

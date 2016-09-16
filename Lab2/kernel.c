@@ -11,12 +11,12 @@ int body()
          rflag = 0;
          tswitch();
      }
+     printf("PROC %d running: parent = %d\n", running->pid, running->ppid);
      printf("------------------------------------------------------\n");
      printList("freelist   => ", freeList); // optional: show the freelist
      printList("readyQueue => ", readyQueue); // show the readyQueue
      printList("sleepList  => ", sleepList);
      printf("------------------------------------------------------\n");
-     printf("PROC %d running: parent = %d  ", running->pid, running->ppid);
      printf("enter a char [s|f|w|q] : ");
      c = getc(); printf("%c\n", c);
      switch(c)

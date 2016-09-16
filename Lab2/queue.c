@@ -79,16 +79,26 @@ PROC *get_proc(PROC **list)
 }
 
 /*
- * enter p into list
+ * enter p into end of list
  */
 int put_proc(PROC **list, PROC *p)
 {
-    PROC *pcur = *list;
-    while (pcur->next != 0)
-    {
-        pcur = pcur->next;
-    }
-    // at the end
-    pcur->next = p;
+    PROC *pcur = *list, *temp = p;
+
     p->next = 0;
+
+    if (pcur == 0)
+    {
+        *list = p;
+        return 1;
+    }
+    else
+    {
+        while (pcur->next != 0)
+        {
+            pcur = pcur->next;
+        }
+        // at the end
+        pcur->next = p;
+    }
 }
