@@ -68,7 +68,7 @@ int kwait(int *status)          // wait for ZOMBIE child
                     p->status = FREE;       // free its PROC
                     put_proc(&freeList, p); // to freeList
                     nproc--;                // once less processes
-                    printf ("child PROC %d has been laid to rest. child PROC exit code = %d\n", p->pid, p->exitCode);
+                    //printf ("child PROC %d has been laid to rest. child PROC exit code = %d\n", p->pid, p->exitCode);
                     return(p->pid);         // return its pid
                 }
             }
