@@ -1,6 +1,6 @@
 // ucode.c file
 
-char *cmd[]={"getpid", "ps", "chname", "kfork", "switch", "wait", "exit", 0};
+char *cmd[]={"getpid", "ps", "chname", "kfork", "switch", "wait", "exit", "getc", "putc", 0};
 
 #define LEN 64
 
@@ -98,10 +98,12 @@ int invalid(char *name)
 
 int getc()
 {
-  //return syscall(90,0,0) & 0x7F;
+    return syscall(97,0,0); // 127 in ASCII table
+    //rintf("getc went to kernel and returned a %c\n", r);
+    //return r;
 }
 
 int putc(char c)
 {
-  //return syscall(91,c,0,0);
+    return syscall(98,c,0,0);
 }

@@ -49,6 +49,8 @@ int kexec(char* filename, PROC *p)
     p->usp = -24;                   // new usp = -2 * 12
     p->uss = segment;               // set at segment
 
+    /*  -1   -2 -3  -4 -5 -6 -7 -8 -9 -10 -11 -12 */
+    /* flag uCS uPC ax bx cx dx bp si  di uES uDs */
     put_word(segment, segment, -2*12);  // saved uDS=segment
     put_word(segment, segment, -2*11);  // saved uES=segment
     put_word(segment, segment, -2*2);   // uCS=segment; uPC=0

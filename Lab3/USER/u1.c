@@ -10,6 +10,8 @@ int color;
 main()
 {
   char name[64]; int pid, cmd;
+  int r;
+  char c;
 
   while(1){
     pid = getpid();
@@ -34,6 +36,14 @@ main()
            case 5 : wait();     break;
            case 6 : exit();     break;
 
+           case 7 : printf("enter an char: ");
+                    r = getc();
+                    printf("getc went to kernel and got a %c\n", r);
+                    break;
+           case 8 : printf("enter an char: ");
+                    c = getc();
+                    printf("putc went to kernel and put %c\n", r);
+                    break;
            default: invalid(name); break;
     }
   }

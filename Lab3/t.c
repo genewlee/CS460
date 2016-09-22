@@ -6,7 +6,7 @@ int nproc = 0;
 int color;
 
 int body();
-char *pname[]={"Sun", "Mercury", "Venus", "Earth",  "Mars", "Jupiter", 
+char *pname[]={"Sun", "Mercury", "Venus", "Earth",  "Mars", "Jupiter",
                "Saturn", "Uranus", "Neptune" };
 
 /**************************************************
@@ -14,11 +14,13 @@ char *pname[]={"Sun", "Mercury", "Venus", "Earth",  "Mars", "Jupiter",
 **************************************************/
 /* #include "bio.c" */
 #include "queue.c"
-/* #include "loader.c" */
+#include "gloader.c"
+/* #include "loader.c"*/
 
 #include "wait.c"             // YOUR wait.c   file
 #include "kernel.c"           // YOUR kernel.c file
 #include "int.c"              // YOUR int.c    file
+
 
 
 int init()
@@ -30,7 +32,7 @@ int init()
         p = &proc[i];
         p->pid = i;
         p->status = FREE;
-        p->priority = 0;  
+        p->priority = 0;
         strcpy(proc[i].name, pname[i]);
         p->next = &proc[i+1];
     }
@@ -46,24 +48,24 @@ int init()
     running = p;
     nproc = 1;
     printf("done\n");
-} 
+}
 
 int scheduler()
 {
     if (running->status == READY)
         enqueue(&readyQueue, running);
      running = dequeue(&readyQueue);
-     color = running->pid + 0x0A;
+     //color = running->pid + 0x0A;
 }
 
 int int80h();
 int set_vector(u16 vector, u16 handler)
 {
      // put_word(word, segment, offset)
-     put_word(handler, 0, vector<<2);
-     put_word(0x1000,  0,(vector<<2) + 2);
+     put_word(handler, 0, vector<<2);       // KPC points to handler
+     put_word(0x1000,  0,(vector<<2) + 2);  // KCS segment=0x1000
 }
-            
+
 main()
 {
     printf("\nMTX starts in main()\n");

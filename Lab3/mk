@@ -1,8 +1,9 @@
 VFD=mtximage
 
 as86 -o ts.o ts.s
+as86 -o bs.o bs.s
 bcc  -c -ansi t.c
-ld86 -d -o mtx ts.o t.o mtxlib /usr/lib/bcc/libc.a
+ld86 -d -o mtx ts.o t.o mtxlib /usr/lib/bcc/libc.a bs.o 
 
 mount -o loop $VFD /mnt
 cp mtx /mnt/boot/

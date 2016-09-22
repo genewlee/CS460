@@ -29,6 +29,9 @@ int kcinth()
        case 5 : r = kkwait(b);        break;
        case 6 : r = kkexit(b);        break;
 
+       case 97: r = getc();           break;
+       case 98: color=running->pid + 7;
+                r = putc(b);          break;
        case 99: kkexit(b);            break;
        default: printf("invalid syscall # : %d\n", a); 
    }
