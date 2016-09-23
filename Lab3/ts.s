@@ -66,7 +66,7 @@ _int80h:
         push cs
         pop  ds                 ! KDS now
 
-	mov bx,_running  	! ready to access proc
+	    mov bx,_running  	    ! ready to access proc
         mov USS[bx],ss          ! save uSS  in proc.USS
         mov USP[bx],sp          ! save uSP  in proc.USP
 

@@ -2,7 +2,7 @@
 /*************** kernel command functions ***********/
 int body()
 {
-   char c;
+   char c; int exitValue;
    color = running->pid + 7;
    printf("----------------KERNEL MODE-------------------\n");
    printf("PROC %d resumes from body()\n", running->pid);
@@ -25,7 +25,9 @@ int body()
          case 'f' : do_kfork();   break;
          case 's' : do_tswitch(); break;
          case 'w' : do_wait();    break;
-         case 'q' : do_exit();    break;
+         case 'q' : printf("enter an exitValue: ");
+                    exitValue = gets();
+                    do_exit(atoi(exitValue));    break;
          case 'u' : goUmode();    break;
          default: printf("invalid command\n"); break;
      }
@@ -43,7 +45,7 @@ int kexec(char* filename, PROC *p)
         return -1;                  // if load failed, return -1 to Umode
 
     /* re-initialize process ustack for it return to VA=0 */
-    for (i = 1; i < 12; i++)
+    for (i = 1; i < 12; i++) // throught 12 because dont want o overwrite retPC and 1 because dont 0 out Uds
         put_word(0, segment, -2*i);
 
     p->usp = -24;                   // new usp = -2 * 12
