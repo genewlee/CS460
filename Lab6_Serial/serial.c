@@ -208,6 +208,12 @@ int do_rx(struct stty *tty)   /* interrupts already disabled */
   //use bputc() to ECHO the input char to serial port 
   //bputc(tty->port, c);
 
+  if (tty->inchars.value >= BUFLEN)
+  {
+    //bputc(tty->port, BEEP);
+    return;
+  }
+
   if (c == '\r')
   {
     c = '\n';

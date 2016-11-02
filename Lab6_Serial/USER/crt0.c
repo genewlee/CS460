@@ -12,8 +12,10 @@ char *argv[32], *temp;
 // token() breaks up a string into argc of tokens, pointed by argv[]
 int parse (char *path)
 {
+    char *s;
+    s = path;
     argc = 0;
-    temp = strtok(path, " ");
+    temp = strtok(s, " ");
     while (temp != 0)
     {
         argv[argc++] = temp;
