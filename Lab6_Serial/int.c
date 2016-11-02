@@ -32,6 +32,10 @@ int kcinth()
        case 7 : r = fork();           break;
        case 8 : r = exec(b);          break;
 
+       // FOCUS on ksin() nd ksout()
+       case 9 : r = ksout(b,c);        break;
+       case 10: r = ksin(b,c);         break;
+
        case 30: r = kpipe(b);         break;
        case 31: r = read_pipe(b,c,d); break;
        case 32: r = write_pipe(b,c,d); break;
@@ -159,3 +163,35 @@ int ktime_slice(int s)
   running->time = s;
 }
 
+int ksin(int port, char *y)
+{
+  // get a line from serial port; write line to Umode
+  char line[128], *p, c;
+  int len, i = 0;
+
+  sgetline(port, line);
+  len = strlen(line);
+  //printf("line = %s\n", line);
+
+  while (line[i] != 0){
+   put_byte(line[i], running->uss, y);
+     i++; y++;
+  }
+  put_byte(0, running->uss, y); // null char
+  return len;
+}
+
+int ksout(int port, char *y)
+{
+  // get line from Umode; write line to serial port
+  int i;
+  char buf[64];
+
+  for (i=0; i < 64; i++) // size of name is limited to 32 bits
+  {
+      buf[i] = get_word(running->uss, y++);
+  }
+  
+  //printf("ksout %s\n", buf);
+  sputline(port, buf);
+}

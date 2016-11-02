@@ -1,7 +1,7 @@
 // ucode.c file
 
 char *cmd[]={"getpid", "ps", "chname",  "kmode", "switch", "wait", "exit", "fork","exec",
-         "pipe", "read", "write", "close", "pfd", "hop", "itimer", 0};
+         "pipe", "read", "write", "close", "pfd", "hop", "itimer", "sout", "sin", 0};
 
 #define LEN 64
 
@@ -10,6 +10,7 @@ int show_menu()
    printf("***************** Menu ********************************\n");
    printf("*  ps  chname  switch  kmode  wait  exit  fork  exec  *\n");
    printf("*  hop   pipe   read   write  close pfd   itimer      *\n");
+   printf("*  sout   sin                                         *\n");
    printf("*******************************************************\n");
 }
 
@@ -241,3 +242,24 @@ int putc(char c)
     return syscall(98,c,0,0);
 }
 
+int sout()
+{
+  char uline[64];
+  int port;
+  printf("Enter port number [0|1] : ");
+  port = geti();
+  printf("input a line to output: ");
+  gets(uline);
+  syscall(9, port, uline);
+}
+
+int sin()
+{
+  char uline[64];
+  int port;
+  printf("Enter port number [0|1] : ");
+  port = geti();
+  //printf("port = %d\n", port);
+  syscall(10, port, uline, 0);
+  printf("uline=%s\n", uline);
+}
