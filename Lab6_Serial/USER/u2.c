@@ -32,7 +32,7 @@ main(int argc, char *argv[])
            case 0 : getpid();   break;
            case 1 : ps();       break;
            case 2 : chname();   break;
-           case 3 : printf("Going to kernel mode not implmented in %s\n", argv[0]); break;//kfork();    break;
+           case 3 : kmode(); break;//kfork();    break;
            case 4 : kswitch();  break;
            case 5 : wait();     break;
            case 6 : exit();     break;
@@ -47,8 +47,12 @@ main(int argc, char *argv[])
            case 13: upfd();      break;
 
            case 14: uhop();      break;
-           /*
-           case 7 : printf("enter an char: ");
+           case 15: u_itimer();  break;
+
+           case 16: sout();      break;
+           case 17: sin();       break;
+           
+           /*case 7 : printf("enter an char: ");
                     r = getc();
                     printf("getc went to kernel and got a %c\n", r);
                     break;
@@ -56,7 +60,6 @@ main(int argc, char *argv[])
                     c = getc();
                     printf("putc went to kernel and put %c\n", r);
                     break;*/
-           default: invalid(name); break;
     }
   }
 }

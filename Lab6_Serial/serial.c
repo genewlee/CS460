@@ -27,12 +27,12 @@ struct stty {
    /* input buffer */
    char inbuf[BUFLEN];
    int inhead, intail;
-   struct semaphore inchars, line;
+   struct semaphore inchars, inmutex;
 
    /* output buffer */
    char outbuf[BUFLEN];
    int outhead, outtail;
-   struct semaphore outroom;
+   struct semaphore outroom, outmutex;
    int tx_on;
 
    /* Control section */
@@ -87,8 +87,8 @@ int sinit()
           t->port = 0x2F8;    /* COM2 base address */  
 
       t->inchars.value  = 0;  t->inchars.queue = 0;
-      //t->inmutex.value  = 1;  t->inmutex.queue = 0;
-      //t->outmutex.value = 1;  t->outmutex.queue = 0;
+      t->inmutex.value  = 1;  t->inmutex.queue = 0;
+      t->outmutex.value = 1;  t->outmutex.queue = 0;
       t->outroom.value = BUFLEN; t->outroom.queue = 0;
 
       t->inhead = t->intail = 0;
@@ -210,9 +210,15 @@ int do_rx(struct stty *tty)   /* interrupts already disabled */
 
   if (tty->inchars.value >= BUFLEN)
   {
-    //bputc(tty->port, BEEP);
+    bputc(tty->port, BEEP);
     return;
   }
+
+  // if (c==0x3)   // Control-C
+  // {
+  //   // send SIGINT(2)
+  //   c = '\n';
+  // }
 
   if (c == '\r')
   {
@@ -265,17 +271,19 @@ int sgetline(int port, char *line)
     //printf("%d : %c\n", i, tty->inbuf[i]);
 
   printf("sgetline ");
-  while (1) // will need to fix in case other processes might want to print a line
-  {
-    *line = sgetc(tty);
-    if (*line == '\n')
+  P(&tty->inmutex);
+    while (1) // will need to fix in case other processes might want to print a line
     {
-      break;
+      *line = sgetc(tty);
+      if (*line == '\n')
+      {
+        break;
+      }
+      //printf("char is %c\n", *line);
+      line++;
     }
-    //printf("char is %c\n", *line);
-    line++;
-  }
-  *line = NULLCHAR; // replace \n with null terminating
+    *line = NULLCHAR; // replace \n with null terminating
+  V(&tty->inmutex);
   return strlen(line);
 }
 
@@ -328,13 +336,16 @@ int sputline(int port, char *line)
   struct stty *tty = &stty[port];
 
   /* Will need to handle multi processes later */
-  while (*line)
-  {
-    sputc(tty, *line++);   // print chars
-  }
-  sputc(tty, '\n');       // just so that it goes to next line
+  P(&tty->outmutex);
+    while (*line)
+    {
+      sputc(tty, *line++);   // print chars
+    }
+    sputc(tty, '\n');       // just so that it goes to next line
+  V(&tty->outmutex);
 }
 
+/*********************** Kernel calls ***************************/
 int do_sgetline()
 {
   char *port, line[64];
