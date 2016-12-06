@@ -62,8 +62,8 @@ int main(int argc, char *argv[])   // invoked by exec("login /dev/ttyxx")
         {
           strcpy(pw, password);
           //6. if (user account valid){
-          uid = upwline[2];    //setuid to user uid.
-          gid = upwline[3];    //set group id
+          uid = atoi(upwline[2]);    //setuid to user uid.
+          gid = atoi(upwline[3]);    //set group id
           chuid(uid, gid);
           strcpy(home, upwline[5]);   // get home dir
           strcpy(program, upwline[6]);// get program
