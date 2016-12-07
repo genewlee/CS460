@@ -6,7 +6,7 @@
 //************************************************************************
 
 int pid, child, status;
-int stdin, stdout;
+int stdin, stdout, stderr;
 
 #include "ucode.c"  //<========== AS POSTED on class website
 
@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
   //1. // open /dev/tty0 as 0 (READ) and 1 (WRTIE) in order to display messages
   stdin = open("/dev/tty0", O_RDONLY);
   stdout = open("/dev/tty0", O_WRONLY);
+  stderr = open("/dev/tty0", O_RDWR);
 
   //2. // Now we can use printf, which calls putc(), which writes to stdout
    printf("INIT : fork a login task on console\n"); 
@@ -29,10 +30,12 @@ int main(int argc, char *argv[])
       s0 = fork();
       if (s0)
       {
-        printf("INIT: fork login on serial port 1\n");
+        // printf("INIT: fork login on serial port 1\n");
         // s1 = fork();
         // if (s1)
+        // {
         //   parent();
+        // }
         // else
         //   loginS1();
         parent();

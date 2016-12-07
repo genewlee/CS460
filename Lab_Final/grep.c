@@ -15,19 +15,6 @@ int main (int argc, char *argv[])
 	fd = 0; // from stdin?
 
 	patternLen = strlen(argv[1]);
-	
-	// if (argc == 2)
-	// {
-	// 	while (1)
-	// 	{
-	// 		readCount = gets(linebuf);
-	// 		if (strncmp(linebuf, argv[1], patternLen) == 0)
-	// 		{
-	// 			printf("%s\n\r", linebuf);
-	// 		}
-	// 		if (readCount < 0) break;
-	// 	}
-	// }
 
 	if (argc == 3)
 	{
