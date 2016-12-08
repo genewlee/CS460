@@ -22,10 +22,10 @@ int getcmd(char *cmd)
 
 int menu()
 {
-  printf("#############################################################\n\r");
-  printf("#  ls       cd     pwd    cat   more    cp          >   >>  #\n\r");
-  printf("#  mkdir    rmdir  creat  rm    chmod   chown       <   |   #\n\r");
-  printf("#############################################################\n\r");
+  printf("##############################################################\n\r");
+  printf("#  ls       cd     pwd    cat   more    cp     l2u   >   >>  #\n\r");
+  printf("#  mkdir    rmdir  creat  rm    chmod   chown  grep  <   |   #\n\r");
+  printf("##############################################################\n\r");
 }
 
 int main(int argc, char *argv[])

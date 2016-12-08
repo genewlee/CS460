@@ -33,9 +33,7 @@ int main(int argc, char *argv[])
         // printf("INIT: fork login on serial port 1\n");
         // s1 = fork();
         // if (s1)
-        // {
         //   parent();
-        // }
         // else
         //   loginS1();
         parent();
@@ -44,10 +42,8 @@ int main(int argc, char *argv[])
         loginS0();
     }
     else // child exec to login on tty0
-    {
       //printf("CHILD ELSE= %d\n", child);
       login();
-    }
 }       
 
 int login()
@@ -83,7 +79,7 @@ int parent()
     {
       printf("HELLO S0\n");
       s0 = fork();
-      if (!s0)
+      if (!s0)    // child
         loginS0();
     }
     else if (pid == s1)
