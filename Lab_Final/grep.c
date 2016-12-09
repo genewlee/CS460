@@ -6,7 +6,7 @@ int main (int argc, char *argv[])
 	int patternLen, readCount, i, lineNum = 0;
 	char linebuf[512], *pline, *crline;
 
-	if (argc < 3 && argc != 2)					// didnt enter all arguments
+	if (argc < 3 && argc != 2)	// didnt enter all arguments
 	{
 		printf("format: grep PATTERN FILE\n");
 		exit(-1);
@@ -31,8 +31,7 @@ int main (int argc, char *argv[])
 		for (i = 0; i < 512; i++)
 		{
 			readCount = read(fd, &linebuf[i], 1);
-			//if (linebuf[i] == '\r') i--;
-			if (linebuf[i] == '\n')// && linebuf[i] != '\r') // '/r' when passed into l2u
+			if (linebuf[i] == '\n')
 			{
 				lineNum++;
 				linebuf[i + 1] = NULL; break;
@@ -43,8 +42,8 @@ int main (int argc, char *argv[])
 			break;
 
 		pline = linebuf;
-		while (*pline == '\r') pline++; 		// remove leading \r
-		crline = pline;//strcpy(crline,pline);					// used so that cr is not perfomed before printing lineNum
+		while (*pline == '\r') pline++; // remove leading \r
+		crline = pline;			// used so that cr is not perfomed before printing lineNum
 		// look through line for pattern match
 		for (i = 0; linebuf[i] != '\n'; i++, pline++)
 		{

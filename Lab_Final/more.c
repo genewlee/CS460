@@ -47,14 +47,14 @@ int main (int argc, char *argv[])
 	char c, tty[64];
 	STAT st0, st1, st_tty;
 
-	fd = 0; 		// stdin
+	fd = 0; 		// stdin or pipe
 
 	gettty(&tty);
 	stat(tty, &st_tty);
 	fstat(0, &st0); 
 	fstat(1, &st1);
 
-  	readredirected = 1;
+	readredirected = 1;
 	if (st_tty.st_dev == st0.st_dev && st_tty.st_ino == st0.st_ino)
 		readredirected = 0;
 
@@ -70,9 +70,9 @@ int main (int argc, char *argv[])
 			printf ("error getting file %s\n", argv[2]); exit (-1);
 		}
 	}
-	else if (argc == 1)
+	else if (argc == 1 && readredirected) // read redirected
 	{
-		cmdfd = open(tty, O_RDONLY);	// since reading from stdin (fd = 0), we need commands from tty
+		cmdfd = open(tty, O_RDONLY); //since reading from stdin (fd = 0), we need commands from tty
 	}
 
 	//printf ("argc = %d, fd = %d\n", argc, fd);
@@ -80,7 +80,7 @@ int main (int argc, char *argv[])
 	printpage();	// prints one page first
 	while (1)
 	{
-		if (readredirected)
+		if (readredirected) // need to get commands from user from tty
 			read(cmdfd, &c, 1);
 		else 
 			c = getc();

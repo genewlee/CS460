@@ -1,4 +1,11 @@
-qemu -hda vdisk -m 512M -smp 1 -serial /dev/pts/11 -serial /dev/pts/19 \
--parallel /dev/pts/20 -localtime #-cdrom MTXinstallCD.iso #-boot d
+#qemu -hda vdisk -m 512M -smp 1 -serial /dev/pts/11 -serial /dev/pts/19 \
+#-parallel /dev/pts/20 -localtime #-cdrom MTXinstallCD.iso #-boot d
 
+parallel=""
 
+if [ "$3" != "" ]
+then
+	$parallel="-parallel /dev/pts/$3"
+fi
+
+qemu -hda vdisk -m 512M -smp 1 -serial /dev/pts/$1 -serial /dev/pts/$2 -localtime $parallel

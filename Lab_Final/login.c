@@ -2,12 +2,12 @@
 
 char *tty, *token, *upwlines[128], *upwline[10];
 char buffer[2048], username[64], password[64], user[64], pw[64], home[64], program[64];
-int uid, gid, i, j, valid;
+int uid, gid, i, j;
 int stdin, stdout, stderr, upwfd;
 
 int main(int argc, char *argv[])   // invoked by exec("login /dev/ttyxx")
 {
-  i = 0; j = 0; valid = 0;
+  i = 0; j = 0;
   tty =  argv[1];
 
  //1. close(0); close(1); close(2); // login process may run on different terms
@@ -41,8 +41,8 @@ int main(int argc, char *argv[])   // invoked by exec("login /dev/ttyxx")
     upwfd = open("/etc/passwd", O_RDONLY);
     read(upwfd, buffer, 2048);
 
-    upwlines[i] = strtok(buffer, "\n");
-    while (upwlines[i] != NULL)         // each line split by ':'
+    upwlines[i] = strtok(buffer, "\n"); // get all lines in file
+    while (upwlines[i] != NULL)         // each line split by '\n'
     {
       upwlines[++i] = strtok(NULL, "\n");
     } 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])   // invoked by exec("login /dev/ttyxx")
     for (j = 0; upwlines[j] != NULL; j++)
     {
       i = 0;
-      upwline[i] = strtok(upwlines[j], ":");
+      upwline[i] = strtok(upwlines[j], ":"); // tokenize line
       while (upwline[i] != NULL)        // each part in line split by ':'
       {
         upwline[++i] = strtok(NULL, ":");

@@ -5,7 +5,7 @@ int main (int argc, char *argv[])
 	int srcfd, destfd, readCount, i;
 	char buf[1024];
 
-	if (argc < 2)		// stdin -> piped
+	if (argc < 2)		// stdin -> piped / write redirected
 	{
 		srcfd = 0; destfd = 1;
 		while (1)

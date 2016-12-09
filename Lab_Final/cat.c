@@ -11,18 +11,16 @@ int main (int argc, char*argv[])
 	STAT st0, st1, st_tty;
 	int readredirected, writeredirected;
 
-	char *welcome = "\n ================== Gene's almost as cool as KC's cat MEOW! ==================\n\r";
+	char *welcome = "\n ============= Gene's almost as cool as KC's cat MEOW! =============\n\n\r";
 	
 	write(STDERR, welcome, strlen(welcome));
-
-	cfd = 0; // from stdin
 
 	gettty(&tty);
 	stat(tty, &st_tty);
 	fstat(0, &st0); 
 	fstat(1, &st1);
 
-  	readredirected = 1;
+	readredirected = 1;
 	if (st_tty.st_dev == st0.st_dev && st_tty.st_ino == st0.st_ino)
 		readredirected = 0;
 
@@ -35,7 +33,9 @@ int main (int argc, char*argv[])
 	ttyfd = open(tty, O_WRONLY);
 	settty(tty);
 
-	if (argc > 1)
+	cfd = 0; // from stdin
+
+	if (argc > 1)	// cat f
 	{
 		cfd = open(argv[1], O_RDONLY);
 	}
@@ -49,32 +49,31 @@ int main (int argc, char*argv[])
     {
         if (cfd == 0) 		// from stdin
         {
-        	if (ch == '\r')			// this takes care of writing to the stdout/redirect/pipe
-        		write(1, "\n", 1);
-        	else
-        		write(1, &ch, 1);
+			if (ch == '\r')			// this takes care of writing to the stdout/redirect/pipe
+				write(1, "\n", 1);
+			else
+				write(1, &ch, 1);
 
-        	if (readredirected && writeredirected) // just cat is between pipes cmd | cat | cmd'
-        		continue;						 // we don't really check anything except whats done above
+			if (readredirected && writeredirected) // just cat is between pipes cmd | cat | cmd'
+				continue; // we don't really need to do anything other than above .. pass it along
 
-        	else if (readredirected == 0 && writeredirected == 0)	// only cat cmd
-        	{
-        		buf[j++] = ch;
-        		if (ch == '\r')
-        		{
-        			write(STDERR, &ch, 1);	
-					write(STDERR, &buf, strlen(buf));
+			else if (readredirected == 0 && writeredirected == 0)	// only cat cmd
+			{
+				buf[j++] = ch;
+				if (ch == '\r')
+				{
+					write(STDERR, &ch, 1);	
+					write(STDERR, &buf, strlen(buf));			// echo what the user wrote
 					write(STDERR, "\n\r", 2);	
 					for (j=0; j < 256; j++) { buf[j] = NULL; } j = 0;	// clear out the line buf
-        		}
-        	}
-        	else if (writeredirected && readredirected == 0)		// cat > file
-            {
-            	write(STDERR, &ch, 1);		// this is just to display
-            	if (ch == '\r')
-                	write(STDERR, "\n\r", 2);
-            }
-	
+				}
+			}
+			else if (writeredirected && readredirected == 0)		// cat > file
+			{
+				write(STDERR, &ch, 1);		// this is just to display
+				if (ch == '\r')
+			    	write(STDERR, "\n\r", 2);
+			}
         }
         else				// not from stdin
         {
