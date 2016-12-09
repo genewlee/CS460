@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     s0 = fork();
     if (s0)
     {
+      // sleep();
       // printf("INIT: fork login on serial port 1\n");
       // s1 = fork();
       // if (s1)
